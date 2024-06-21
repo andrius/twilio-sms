@@ -11,7 +11,6 @@ const ConversationList = ({
   <div className="accordion" id="conversationAccordion">
     {conversations.map(([otherNumber, messages], index) => {
       const latestMessage = messages[0];
-      const isIncoming = latestMessage.from !== phoneNumber;
       const formattedDate = new Date(latestMessage.date_sent).toLocaleString(
         "en-US",
         {
@@ -20,7 +19,6 @@ const ConversationList = ({
           day: "2-digit",
           hour: "2-digit",
           minute: "2-digit",
-          second: "2-digit",
           hour12: false,
         },
       );
@@ -30,7 +28,7 @@ const ConversationList = ({
           <div className="card-header" id={`heading${index}`}>
             <h2 className="mb-0">
               <button
-                className="btn btn-link btn-block text-left"
+                className="btn btn-link btn-block text-left d-flex justify-content-between align-items-center"
                 type="button"
                 data-toggle="collapse"
                 data-target={`#collapse${index}`}
@@ -42,8 +40,14 @@ const ConversationList = ({
                   )
                 }
               >
-                {formattedDate} - {isIncoming ? "IN" : "OUT"} - {otherNumber} -{" "}
-                {latestMessage.body.substring(0, 50)}...
+                <span className="conversation-summary">
+                  <strong>{otherNumber}</strong>
+                  <small className="text-muted ml-2">{formattedDate}</small>
+                </span>
+                <span className="conversation-preview">
+                  {latestMessage.body.substring(0, 50)}
+                  {latestMessage.body.length > 50 ? "..." : ""}
+                </span>
               </button>
             </h2>
           </div>

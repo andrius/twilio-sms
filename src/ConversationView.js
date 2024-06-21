@@ -16,7 +16,7 @@ const ConversationView = ({
   };
 
   return (
-    <div>
+    <div className="conversation-container">
       <div className="conversation-messages mb-3">
         {messages
           .slice()
@@ -31,7 +31,6 @@ const ConversationView = ({
                 day: "2-digit",
                 hour: "2-digit",
                 minute: "2-digit",
-                second: "2-digit",
                 hour12: false,
               },
             );
@@ -39,28 +38,27 @@ const ConversationView = ({
             return (
               <div
                 key={message.sid}
-                className={`mb-2 ${isOutgoing ? "text-right" : "text-left"}`}
+                className={`message-bubble ${isOutgoing ? "outgoing" : "incoming"}`}
               >
-                <small>
-                  {formattedDate} [{isOutgoing ? "OUT" : "IN"}]
-                </small>
-                <br />
-                <strong>{isOutgoing ? "You" : otherNumber}:</strong>{" "}
-                {message.body}
+                <div className="message-content">{message.body}</div>
+                <div className="message-timestamp">{formattedDate}</div>
               </div>
             );
           })}
       </div>
       <div className="reply-form">
-        <textarea
-          className="form-control mb-2"
-          value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)}
-          placeholder="Type a reply..."
-        />
-        <button className="btn btn-primary" onClick={handleSendReply}>
-          Reply
-        </button>
+        <div className="input-group">
+          <input
+            type="text"
+            className="form-control"
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            placeholder="Type a reply..."
+          />
+          <button className="btn btn-primary" onClick={handleSendReply}>
+            <i className="fas fa-paper-plane"></i>
+          </button>
+        </div>
       </div>
     </div>
   );
