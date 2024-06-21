@@ -1,19 +1,13 @@
-.App {
-  font-family: sans-serif;
-  text-align: center;
-}
-
-.cursor-pointer {
-  cursor: pointer;
+.container-fluid {
+  max-width: 1200px;
 }
 
 .conversation-messages {
-  max-height: 300px;
+  max-height: 400px;
   overflow-y: auto;
   border: 1px solid #dee2e6;
   border-radius: 0.25rem;
   padding: 10px;
-  margin-bottom: 15px;
 }
 
 .text-right {
@@ -22,4 +16,20 @@
 
 .text-left {
   text-align: left;
+}
+
+.card-header .btn-link {
+  text-decoration: none;
+  color: #212529;
+  width: 100%;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-header .btn-link:hover,
+.card-header .btn-link:focus {
+  color: #0056b3;
+  text-decoration: none;
 }

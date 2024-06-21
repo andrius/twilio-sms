@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { loginToTwilio, fetchPhoneNumbers } from "./api";
-import LoginForm from "./LoginForm";
 import PhoneNumberCard from "./PhoneNumberCard";
+import LoginForm from "./LoginForm";
 
 const App = () => {
   const [accountSid, setAccountSid] = useState(
-    localStorage.getItem("accountSid") || ""
+    localStorage.getItem("accountSid") || "",
   );
   const [authToken, setAuthToken] = useState(
-    localStorage.getItem("authToken") || ""
+    localStorage.getItem("authToken") || "",
   );
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [phoneNumbers, setPhoneNumbers] = useState([]);
@@ -43,7 +43,7 @@ const App = () => {
   };
 
   return (
-    <div className="container mt-5">
+    <div className="container-fluid mt-3">
       {!isAuthenticated ? (
         <LoginForm
           accountSid={accountSid}
@@ -54,8 +54,8 @@ const App = () => {
         />
       ) : (
         <div>
-          <h2 className="mb-4">SMS Conversations</h2>
-          <button className="btn btn-danger mb-4" onClick={handleLogout}>
+          <h2 className="mb-3">SMS Conversations</h2>
+          <button className="btn btn-danger mb-3" onClick={handleLogout}>
             Logout
           </button>
           {phoneNumbers.map((phoneNumber) => (

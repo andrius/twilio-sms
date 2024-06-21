@@ -1,50 +1,57 @@
 import React, { useState } from "react";
-import { sendMessage } from "./api";
 
 const ConversationView = ({
-  conversation,
+  messages,
   phoneNumber,
-  accountSid,
-  authToken,
-  refreshConversations,
+  otherNumber,
+  onSendMessage,
 }) => {
   const [newMessage, setNewMessage] = useState("");
-  const [sendStatus, setSendStatus] = useState("");
 
   const handleSendReply = async () => {
-    try {
-      setSendStatus("Sending...");
-      await sendMessage(
-        accountSid,
-        authToken,
-        phoneNumber,
-        conversation.otherNumber,
-        newMessage
-      );
-      setSendStatus("Message sent successfully.");
+    if (newMessage.trim()) {
+      await onSendMessage(otherNumber, newMessage);
       setNewMessage("");
-      refreshConversations();
-    } catch (error) {
-      console.error("Error sending message:", error);
-      setSendStatus("Error sending message. Please try again.");
     }
   };
 
   return (
     <div>
-      <h4>Conversation with {conversation.otherNumber}</h4>
-      {conversation.messages.map((message) => (
-        <div
-          key={message.sid}
-          className={`mb-2 ${
-            message.from === phoneNumber ? "text-right" : "text-left"
-          }`}
-        >
-          <strong>{message.from === phoneNumber ? "You" : "Them"}:</strong>{" "}
-          {message.body}
-        </div>
-      ))}
-      <div className="mt-3">
+      <div className="conversation-messages mb-3">
+        {messages
+          .slice()
+          .reverse()
+          .map((message, index) => {
+            const isOutgoing = message.from === phoneNumber;
+            const formattedDate = new Date(message.date_sent).toLocaleString(
+              "en-US",
+              {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+                hour12: false,
+              },
+            );
+
+            return (
+              <div
+                key={message.sid}
+                className={`mb-2 ${isOutgoing ? "text-right" : "text-left"}`}
+              >
+                <small>
+                  {formattedDate} [{isOutgoing ? "OUT" : "IN"}]
+                </small>
+                <br />
+                <strong>{isOutgoing ? "You" : otherNumber}:</strong>{" "}
+                {message.body}
+              </div>
+            );
+          })}
+      </div>
+      <div className="reply-form">
         <textarea
           className="form-control mb-2"
           value={newMessage}
@@ -54,7 +61,6 @@ const ConversationView = ({
         <button className="btn btn-primary" onClick={handleSendReply}>
           Reply
         </button>
-        {sendStatus && <p className="mt-2">{sendStatus}</p>}
       </div>
     </div>
   );
