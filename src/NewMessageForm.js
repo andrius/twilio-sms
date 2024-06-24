@@ -18,7 +18,7 @@ const NewMessageForm = ({ onSendMessage }) => {
       <div className="input-group">
         <input
           type="text"
-          className="form-control"
+          className="form-control form-control-to"
           placeholder="To"
           value={to}
           onChange={(e) => setTo(e.target.value)}

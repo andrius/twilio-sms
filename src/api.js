@@ -28,7 +28,7 @@ export const fetchPhoneNumbers = async (accountSid, authToken) => {
 export const fetchConversations = async (
   accountSid,
   authToken,
-  phoneNumber
+  phoneNumber,
 ) => {
   const client = createClient(accountSid, authToken);
   try {
@@ -41,7 +41,7 @@ export const fetchConversations = async (
     console.log(`Received ${response.data.messages.length} messages`);
 
     const messages = response.data.messages.filter(
-      (message) => message.from === phoneNumber || message.to === phoneNumber
+      (message) => message.from === phoneNumber || message.to === phoneNumber,
     );
     console.log(`Filtered to ${messages.length} messages for ${phoneNumber}`);
 
@@ -55,7 +55,7 @@ export const fetchConversations = async (
     }, {});
 
     const sortedConversations = Object.entries(groupedConversations).sort(
-      (a, b) => new Date(b[1][0].date_sent) - new Date(a[1][0].date_sent)
+      (a, b) => new Date(b[1][0].date_sent) - new Date(a[1][0].date_sent),
     );
 
     console.log(`Grouped into ${sortedConversations.length} conversations`);
@@ -101,7 +101,7 @@ export const sendMessage = async (accountSid, authToken, from, to, body) => {
   } catch (error) {
     console.error(
       "Error details:",
-      error.response ? error.response.data : error.message
+      error.response ? error.response.data : error.message,
     );
     throw error;
   }

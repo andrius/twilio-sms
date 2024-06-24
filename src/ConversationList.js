@@ -10,7 +10,7 @@ const ConversationList = ({
 }) => (
   <div className="accordion" id="conversationAccordion">
     {conversations.map(([otherNumber, messages], index) => {
-      const latestMessage = messages[0];
+      const latestMessage = messages[messages.length - 1];
       const formattedDate = new Date(latestMessage.date_sent).toLocaleString(
         "en-US",
         {
@@ -28,7 +28,7 @@ const ConversationList = ({
           <div className="card-header" id={`heading${index}`}>
             <h2 className="mb-0">
               <button
-                className="btn btn-link btn-block text-left d-flex justify-content-between align-items-center"
+                className="btn btn-link btn-block text-left"
                 type="button"
                 data-toggle="collapse"
                 data-target={`#collapse${index}`}
@@ -40,14 +40,14 @@ const ConversationList = ({
                   )
                 }
               >
-                <span className="conversation-summary">
+                <div className="conversation-summary">
                   <strong>{otherNumber}</strong>
-                  <small className="text-muted ml-2">{formattedDate}</small>
-                </span>
-                <span className="conversation-preview">
+                  <small className="text-muted">{formattedDate}</small>
+                </div>
+                <div className="conversation-preview">
                   {latestMessage.body.substring(0, 50)}
                   {latestMessage.body.length > 50 ? "..." : ""}
-                </span>
+                </div>
               </button>
             </h2>
           </div>

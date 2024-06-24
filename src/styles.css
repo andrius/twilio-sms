@@ -26,7 +26,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 60%;
+  max-width: 100%;
 }
 
 .conversation-container {
@@ -38,9 +38,9 @@
 .conversation-messages {
   flex-grow: 1;
   overflow-y: auto;
-  padding: 10px;
+  padding: 20px 10px; /* Increased top and bottom padding */
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
 }
 
 .message-bubble {
@@ -49,6 +49,14 @@
   padding: 10px;
   border-radius: 20px;
   position: relative;
+}
+
+.message-bubble:first-child {
+  margin-top: 10px; /* Add space before the first message */
+}
+
+.message-bubble:last-child {
+  margin-bottom: 20px; /* Add extra space after the last message */
 }
 
 .message-bubble.incoming {
@@ -72,7 +80,9 @@
 }
 
 .reply-form {
-  margin-top: 10px;
+  margin-top: 20px; /* Increased top margin */
+  padding-top: 10px; /* Added top padding */
+  border-top: 1px solid #e9ecef; /* Added a subtle separator */
 }
 
 .reply-form .input-group .form-control {
@@ -92,6 +102,44 @@
 
 .input-group .form-control:not(:first-child):not(:last-child) {
   border-radius: 0;
+}
+
+.input-group .btn {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+/* Add extra space between conversation threads */
+.card {
+  margin-bottom: 20px;
+}
+
+/* Add extra padding to the card body containing the conversation */
+.card-body {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+/* Add these styles to your existing styles.css file */
+
+.form-control-to {
+  width: 150px !important; /* Adjust this value as needed */
+  flex: 0 0 auto !important;
+}
+
+.input-group {
+  flex-wrap: nowrap;
+}
+
+.input-group .form-control:not(:first-child):not(:last-child) {
+  border-radius: 0;
+  border-right: none;
+}
+
+.input-group .form-control:first-child {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-right: none;
 }
 
 .input-group .btn {

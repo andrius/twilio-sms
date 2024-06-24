@@ -15,36 +15,38 @@ const ConversationView = ({
     }
   };
 
+  // Sort messages in ascending order
+  const sortedMessages = [...messages].sort(
+    (a, b) => new Date(a.date_sent) - new Date(b.date_sent),
+  );
+
   return (
     <div className="conversation-container">
       <div className="conversation-messages mb-3">
-        {messages
-          .slice()
-          .reverse()
-          .map((message, index) => {
-            const isOutgoing = message.from === phoneNumber;
-            const formattedDate = new Date(message.date_sent).toLocaleString(
-              "en-US",
-              {
-                year: "numeric",
-                month: "2-digit",
-                day: "2-digit",
-                hour: "2-digit",
-                minute: "2-digit",
-                hour12: false,
-              },
-            );
+        {sortedMessages.map((message, index) => {
+          const isOutgoing = message.from === phoneNumber;
+          const formattedDate = new Date(message.date_sent).toLocaleString(
+            "en-US",
+            {
+              year: "numeric",
+              month: "2-digit",
+              day: "2-digit",
+              hour: "2-digit",
+              minute: "2-digit",
+              hour12: false,
+            },
+          );
 
-            return (
-              <div
-                key={message.sid}
-                className={`message-bubble ${isOutgoing ? "outgoing" : "incoming"}`}
-              >
-                <div className="message-content">{message.body}</div>
-                <div className="message-timestamp">{formattedDate}</div>
-              </div>
-            );
-          })}
+          return (
+            <div
+              key={message.sid}
+              className={`message-bubble ${isOutgoing ? "outgoing" : "incoming"}`}
+            >
+              <div className="message-content">{message.body}</div>
+              <div className="message-timestamp">{formattedDate}</div>
+            </div>
+          );
+        })}
       </div>
       <div className="reply-form">
         <div className="input-group">
@@ -56,7 +58,7 @@ const ConversationView = ({
             placeholder="Type a reply..."
           />
           <button className="btn btn-primary" onClick={handleSendReply}>
-            <i className="fas fa-paper-plane"></i>
+            Send
           </button>
         </div>
       </div>
