@@ -8,6 +8,7 @@ const PhoneNumberCard = ({
   accountSid,
   authToken,
   conversations,
+  lastProcessedMessageId,
 }) => {
   const [selectedConversation, setSelectedConversation] = useState(null);
 
@@ -35,6 +36,7 @@ const PhoneNumberCard = ({
             setSelectedConversation={setSelectedConversation}
             phoneNumber={phoneNumber}
             onSendMessage={handleSendMessage}
+            lastProcessedMessageId={lastProcessedMessageId}
           />
         ) : (
           <p>No conversations found.</p>
