@@ -1,6 +1,9 @@
 # Twilio SMS Web Application
 
+Test it online: https://andrius.mobi/twilio-sms/
+
 This project is a React-based web application that allows users to interact with Twilio SMS services. It provides a user-friendly interface for viewing SMS conversations in a thread view and sending new SMS messages.
+
 ## Note
 
 This project is a demonstration of AI-assisted development and may require further testing and refinement for production use.
