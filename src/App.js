@@ -1,7 +1,12 @@
+// src/App.js
 import React, { useState, useEffect, useCallback } from "react";
 import { loginToTwilio, fetchPhoneNumbers, fetchConversations } from "./api";
 import PhoneNumberCard from "./PhoneNumberCard";
 import LoginForm from "./LoginForm";
+import {
+  requestNotificationPermission,
+  sendNotification,
+} from "./notifications";
 
 const PULL_INTERVAL = process.env.REACT_APP_PULL_INTERVAL || 5000;
 
@@ -15,6 +20,7 @@ const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [phoneNumbers, setPhoneNumbers] = useState([]);
   const [allConversations, setAllConversations] = useState({});
+  const [notificationsEnabled, setNotificationsEnabled] = useState(false);
 
   const fetchAllConversations = useCallback(async () => {
     if (!isAuthenticated) return;
@@ -27,6 +33,29 @@ const App = () => {
           authToken,
           phoneNumber,
         );
+
+        // Check for new messages
+        if (allConversations[phoneNumber]) {
+          const existingConversations = allConversations[phoneNumber];
+          conversations.forEach(([otherNumber, messages]) => {
+            const existingMessages =
+              existingConversations.find(([num]) => num === otherNumber)?.[1] ||
+              [];
+            const newMessages = messages.filter(
+              (msg) =>
+                !existingMessages.some((existing) => existing.sid === msg.sid),
+            );
+
+            if (newMessages.length > 0 && notificationsEnabled) {
+              sendNotification(
+                `New message from ${otherNumber}`,
+                newMessages[0].body.substring(0, 50) +
+                  (newMessages[0].body.length > 50 ? "..." : ""),
+              );
+            }
+          });
+        }
+
         newConversations[phoneNumber] = conversations;
       } catch (error) {
         console.error(
@@ -37,12 +66,20 @@ const App = () => {
     }
 
     setAllConversations(newConversations);
-  }, [isAuthenticated, phoneNumbers, accountSid, authToken]);
+  }, [
+    isAuthenticated,
+    phoneNumbers,
+    accountSid,
+    authToken,
+    allConversations,
+    notificationsEnabled,
+  ]);
 
   useEffect(() => {
     if (accountSid && authToken) {
       handleLogin();
     }
+    requestNotificationPermission().then(setNotificationsEnabled);
   }, []);
 
   useEffect(() => {
@@ -96,7 +133,10 @@ const App = () => {
           <div className="d-flex justify-content-between align-items-center mb-3">
             <h2>SMS Conversations</h2>
             <div>
-              <button className="btn btn-primary me-2" onClick={handleRefreshAll}>
+              <button
+                className="btn btn-primary me-2"
+                onClick={handleRefreshAll}
+              >
                 Refresh All
               </button>
               <button className="btn btn-danger" onClick={handleLogout}>
