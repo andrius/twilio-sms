@@ -9,6 +9,8 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - uses: actions/checkout@v4
@@ -20,9 +22,14 @@ jobs:
       - run: npm ci
 
       - run: npm run build
+        env: 
+          PUBLIC_URL: ${{ env.PUBLIC_URL }}
 
-      - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4
+      - uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
           folder: build
+          clean: true
+        env: 
+          PUBLIC_URL: ${{ env.PUBLIC_URL }}
+
