@@ -1,26 +1,26 @@
+// src/components/PhoneNumberCard.js
+
 import React, { useState } from "react";
-import { sendMessage } from "./api";
 import ConversationList from "./ConversationList";
 import NewMessageForm from "./NewMessageForm";
+import { useAuthContext } from "../contexts/AuthContext";
+import { sendMessage } from "../services/api";
 
-const PhoneNumberCard = ({
-  phoneNumber,
-  accountSid,
-  authToken,
-  conversations,
-  lastProcessedMessageId,
-}) => {
+const PhoneNumberCard = ({ phoneNumber, conversations }) => {
+  const { accountSid, authToken } = useAuthContext();
   const [selectedConversation, setSelectedConversation] = useState(null);
 
   const handleSendMessage = async (to, body) => {
     try {
       await sendMessage(accountSid, authToken, phoneNumber, to, body);
-      // The new message will be fetched in the next polling interval
+      // You might want to refresh conversations here or handle the UI update
     } catch (error) {
       console.error("Error sending message:", error);
       alert("Failed to send message. Please try again.");
     }
   };
+
+  console.log(`Conversations for ${phoneNumber}:`, conversations); // Debugging line
 
   return (
     <div className="card mb-4">
@@ -29,14 +29,13 @@ const PhoneNumberCard = ({
       </div>
       <div className="card-body">
         <NewMessageForm onSendMessage={handleSendMessage} />
-        {conversations.length > 0 ? (
+        {conversations && conversations.length > 0 ? (
           <ConversationList
             conversations={conversations}
             selectedConversation={selectedConversation}
             setSelectedConversation={setSelectedConversation}
             phoneNumber={phoneNumber}
             onSendMessage={handleSendMessage}
-            lastProcessedMessageId={lastProcessedMessageId}
           />
         ) : (
           <p>No conversations found.</p>

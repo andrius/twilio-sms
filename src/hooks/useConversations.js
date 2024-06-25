@@ -1,15 +1,15 @@
 // src/hooks/useConversations.js
+
 import { useState, useEffect, useCallback } from "react";
-import { fetchConversations } from "../api";
+import { fetchConversations } from "../services/api";
+import { showNotification } from "../services/notifications";
+import { useAuthContext } from "../contexts/AuthContext";
 
 const PULL_INTERVAL = process.env.REACT_APP_PULL_INTERVAL || 5000;
 
-export const useConversations = (
-  isAuthenticated,
-  phoneNumbers,
-  accountSid,
-  authToken,
-) => {
+export const useConversations = () => {
+  const { isAuthenticated, phoneNumbers, accountSid, authToken } =
+    useAuthContext();
   const [allConversations, setAllConversations] = useState({});
   const [lastNotificationTimes, setLastNotificationTimes] = useState({});
 
@@ -26,6 +26,7 @@ export const useConversations = (
           authToken,
           phoneNumber,
         );
+        console.log(`Fetched conversations for ${phoneNumber}:`, conversations); // Debugging line
         newConversations[phoneNumber] = conversations;
 
         if (conversations.length > 0 && conversations[0][1].length > 0) {
@@ -38,9 +39,10 @@ export const useConversations = (
             messageTime > lastNotificationTime &&
             latestMessage.from !== phoneNumber
           ) {
-            new Notification("New Message", {
-              body: `From: ${latestMessage.from}\n${latestMessage.body.substring(0, 50)}...`,
-            });
+            showNotification(
+              "New Message",
+              `From: ${latestMessage.from}\n${latestMessage.body.substring(0, 50)}...`,
+            );
             newLastNotificationTimes[phoneNumber] = messageTime;
           }
         }

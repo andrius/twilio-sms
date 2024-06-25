@@ -1,4 +1,6 @@
+// src/components/ConversationView.js
 import React, { useState } from "react";
+import MessageBubble from "./MessageBubble";
 
 const ConversationView = ({
   messages,
@@ -15,7 +17,6 @@ const ConversationView = ({
     }
   };
 
-  // Sort messages in ascending order
   const sortedMessages = [...messages].sort(
     (a, b) => new Date(a.date_sent) - new Date(b.date_sent),
   );
@@ -23,30 +24,13 @@ const ConversationView = ({
   return (
     <div className="conversation-container">
       <div className="conversation-messages mb-3">
-        {sortedMessages.map((message, index) => {
-          const isOutgoing = message.from === phoneNumber;
-          const formattedDate = new Date(message.date_sent).toLocaleString(
-            "en-US",
-            {
-              year: "numeric",
-              month: "2-digit",
-              day: "2-digit",
-              hour: "2-digit",
-              minute: "2-digit",
-              hour12: false,
-            },
-          );
-
-          return (
-            <div
-              key={message.sid}
-              className={`message-bubble ${isOutgoing ? "outgoing" : "incoming"}`}
-            >
-              <div className="message-content">{message.body}</div>
-              <div className="message-timestamp">{formattedDate}</div>
-            </div>
-          );
-        })}
+        {sortedMessages.map((message) => (
+          <MessageBubble
+            key={message.sid}
+            message={message}
+            isOutgoing={message.from === phoneNumber}
+          />
+        ))}
       </div>
       <div className="reply-form">
         <div className="input-group">

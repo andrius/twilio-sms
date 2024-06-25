@@ -1,44 +1,25 @@
-// src/App.js
+// src/components/App.js
+
 import React from "react";
 import PhoneNumberCard from "./PhoneNumberCard";
 import LoginForm from "./LoginForm";
-import { useAuth } from "./hooks/useAuth";
-import { useConversations } from "./hooks/useConversations";
+import { useAuthContext } from "../contexts/AuthContext";
+import { useConversations } from "../hooks/useConversations";
 
 const App = () => {
-  const {
-    accountSid,
-    authToken,
-    isAuthenticated,
-    phoneNumbers,
-    setAccountSid,
-    setAuthToken,
-    handleLogin,
-    handleLogout,
-  } = useAuth();
+  const { isAuthenticated, phoneNumbers, handleLogout } = useAuthContext();
+  const allConversations = useConversations();
 
-  const allConversations = useConversations(
-    isAuthenticated,
-    phoneNumbers,
-    accountSid,
-    authToken,
-  );
+  console.log("All conversations:", allConversations); // Debugging line
 
   const handleRefreshAll = () => {
-    // This will trigger a re-fetch in the useConversations hook
-    // You might want to add a force refresh parameter to the hook if needed
+    // Implement refresh logic if needed
   };
 
   return (
     <div className="container-fluid mt-3">
       {!isAuthenticated ? (
-        <LoginForm
-          accountSid={accountSid}
-          authToken={authToken}
-          setAccountSid={setAccountSid}
-          setAuthToken={setAuthToken}
-          handleLogin={handleLogin}
-        />
+        <LoginForm />
       ) : (
         <div>
           <div className="d-flex justify-content-between align-items-center mb-3">
@@ -59,8 +40,6 @@ const App = () => {
             <PhoneNumberCard
               key={phoneNumber}
               phoneNumber={phoneNumber}
-              accountSid={accountSid}
-              authToken={authToken}
               conversations={allConversations[phoneNumber] || []}
             />
           ))}

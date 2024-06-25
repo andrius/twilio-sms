@@ -1,4 +1,4 @@
-// api.js
+// src/services/api.js
 
 import axios from "axios";
 
@@ -66,14 +66,6 @@ export const fetchConversations = async (
   }
 };
 
-const formatPhoneNumber = (phoneNumber) => {
-  // Remove any non-digit characters
-  const digits = phoneNumber.replace(/\D/g, "");
-
-  // Ensure the number starts with a '+'
-  return digits.startsWith("+") ? digits : `+${digits}`;
-};
-
 export const sendMessage = async (accountSid, authToken, from, to, body) => {
   const formattedTo = formatPhoneNumber(to);
   const formattedFrom = formatPhoneNumber(from);
@@ -105,4 +97,12 @@ export const sendMessage = async (accountSid, authToken, from, to, body) => {
     );
     throw error;
   }
+};
+
+export const formatPhoneNumber = (phoneNumber) => {
+  // Remove any non-digit characters
+  const digits = phoneNumber.replace(/\D/g, "");
+
+  // Ensure the number starts with a '+'
+  return digits.startsWith("+") ? digits : `+${digits}`;
 };
