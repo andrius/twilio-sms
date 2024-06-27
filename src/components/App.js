@@ -25,11 +25,8 @@ const App = () => {
           <div className="d-flex justify-content-between align-items-center mb-3">
             <h2>SMS Conversations</h2>
             <div>
-              <button
-                className="btn btn-primary me-2"
-                onClick={handleRefreshAll}
-              >
-                <i className="fas fa-sync-alt"></i> Refresh All
+              <button className="btn btn-primary me-2" onClick={handleRefreshAll}>
+                Refresh All
               </button>
               <button className="btn btn-danger" onClick={handleLogout}>
                 Logout

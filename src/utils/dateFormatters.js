@@ -1,4 +1,5 @@
 // src/utils/dateFormatters.js
+
 export const formatDate = (dateString) => {
   return new Date(dateString).toLocaleString("en-US", {
     year: "numeric",

@@ -1,3 +1,5 @@
+// src/components/NewMessageForm.js
+
 import React, { useState } from "react";
 
 const NewMessageForm = ({ onSendMessage }) => {
